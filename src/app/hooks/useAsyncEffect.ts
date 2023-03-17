@@ -40,7 +40,6 @@ export const useAsyncEffect = (
 
       try {
         const result = await mountCallback();
-        console.log('result', result);
 
         mountSucceeded = true;
 

@@ -1,19 +1,11 @@
-import { REQUEST_OPTIONS, URL } from '../api';
-import { useAsyncEffect } from '../hooks/useAsyncEffect';
+import { useContext } from 'react';
+
+import { Context } from '../store';
 
 function CourseVision() {
-  const { result, error, isLoading } = useAsyncEffect(
-    () =>
-      fetch(URL(), REQUEST_OPTIONS)
-        .then(res => res.json())
-        .then(data => data.courses),
-    () => Promise.resolve(),
-    [],
-  );
+  const store = useContext(Context);
 
-  console.log('result', result);
-  console.log('error', error);
-  console.log('isLoading', isLoading);
+  console.log('store', store);
 
   return (
     <>

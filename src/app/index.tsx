@@ -4,6 +4,7 @@ import CoursePage from './layouts/CoursePage';
 import CourseVision from './layouts/CourseVision';
 import NotFound from './layouts/NotFound';
 import RootLayout from './layouts/RootLayout';
+import { ContextProvider } from './store';
 
 import './style.css';
 
@@ -30,7 +31,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <ContextProvider>
+      <RouterProvider router={router} />
+    </ContextProvider>
+  );
 }
 
 export default App;
