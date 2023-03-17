@@ -2,8 +2,17 @@ import { createContext, useMemo } from 'react';
 
 import { REQUEST_OPTIONS, URL } from './api';
 import { useAsyncEffect } from './hooks/useAsyncEffect';
+import { Courses } from './types';
 
-const Context = createContext(null);
+type Context = {
+  courses: Courses[] | null;
+  error: any;
+  isLoading: boolean;
+};
+
+const initialContext = { courses: null, error: null, isLoading: false };
+
+const Context = createContext<Context>(initialContext);
 
 function ContextProvider({ children }: { children: React.ReactElement }) {
   const {

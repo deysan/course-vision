@@ -539,7 +539,7 @@ body {
 .videos {
   display: grid;
   width: 100%;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
@@ -555,10 +555,16 @@ body {
   border-radius: 20px;
   overflow: hidden;
   transition: 0.4s;
+  cursor: pointer;
 }
 
 .video-wrapper {
   position: relative;
+}
+
+.video-wrapper video {
+  height: 180px;
+  object-fit: cover;
 }
 
 .video-name {
@@ -574,12 +580,19 @@ body {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+
+.video-desc {
+  font-size: 14px;
+  line-height: 1.2em;
+}
+
 .video-view {
   font-size: 12px;
   padding: 12px 20px 20px;
   background-color: var(--video-bg);
   position: relative;
 }
+
 .video-by {
   transition: 0.3s;
   padding: 20px 20px 0px;
@@ -615,7 +628,7 @@ body {
 }
 
 .video:hover video {
-  transform: scale(1.6);
+  transform: scale(1.3);
   transform-origin: center;
 }
 
@@ -1032,8 +1045,10 @@ video {
   height: 4em;
   background-color: #2b333f;
   background-color: rgba(43, 51, 63, 0.7);
+}
 
-  @media screen and (max-width: 625px) {
+@media screen and (max-width: 625px) {
+  .video-js .vjs-control-bar {
     padding-left: 0;
   }
 }
@@ -1075,8 +1090,10 @@ video {
   background-repeat: no-repeat;
   background-size: 6px;
   background-position: 12px;
+}
 
-  @media screen and (max-width: 625px) {
+@media screen and (max-width: 625px) {
+  .vjs-play-control:after {
     display: none;
   }
 }
@@ -1096,8 +1113,10 @@ video {
 
 button.vjs-play-control.vjs-control.vjs-button {
   margin-left: 40px;
+}
 
-  @media screen and (max-width: 625px) {
+@media screen and (max-width: 625px) {
+  button.vjs-play-control.vjs-control.vjs-button {
     margin-left: 0;
   }
 }
