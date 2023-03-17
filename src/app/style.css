@@ -26,6 +26,10 @@ img {
   --delay: 0s;
 }
 
+#root {
+  width: 100%;
+}
+
 body {
   margin: 0;
   padding: 1em 2em;
@@ -54,6 +58,7 @@ body {
 }
 
 .container {
+  margin: 0 auto;
   background-color: var(--theme-bg);
   max-width: 1240px;
   max-height: 900px;
