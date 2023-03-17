@@ -1,9 +1,9 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import CourseItem from './layouts/course-item';
-import CourseVision from './layouts/course-vision';
-import NotFound from './layouts/not-found';
-import RootLayout from './layouts/root-layout';
+import CoursePage from './layouts/CoursePage';
+import CourseVision from './layouts/CourseVision';
+import NotFound from './layouts/NotFound';
+import RootLayout from './layouts/RootLayout';
 
 import './style.css';
 
@@ -19,11 +19,11 @@ const router = createBrowserRouter([
       },
       {
         path: ':courseId',
-        element: <CourseItem />,
+        element: <CoursePage />,
       },
       {
-        path: ':courseId/:itemId',
-        element: <CourseItem />,
+        path: ':courseId/:videoId',
+        element: <CoursePage />,
       },
     ],
   },

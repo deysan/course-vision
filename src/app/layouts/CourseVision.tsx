@@ -1,4 +1,20 @@
+import { REQUEST_OPTIONS, URL } from '../api';
+import { useAsyncEffect } from '../hooks/useAsyncEffect';
+
 function CourseVision() {
+  const { result, error, isLoading } = useAsyncEffect(
+    () =>
+      fetch(URL(), REQUEST_OPTIONS)
+        .then(res => res.json())
+        .then(data => data.courses),
+    () => Promise.resolve(),
+    [],
+  );
+
+  console.log('result', result);
+  console.log('error', error);
+  console.log('isLoading', isLoading);
+
   return (
     <>
       <div className="main-header anim">Discover</div>

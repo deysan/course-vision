@@ -1,4 +1,4 @@
-function CourseItem() {
+function CoursePage() {
   return (
     <>
       <div className="main-header anim">Course Item</div>
@@ -225,4 +225,4 @@ function CourseItem() {
   );
 }
 
-export default CourseItem;
+export default CoursePage;
