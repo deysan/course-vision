@@ -199,11 +199,29 @@ body {
   flex-direction: column;
 }
 
-.side-menu a {
+.side-menu a,
+.side-menu button {
   display: flex;
   align-items: center;
   text-decoration: none;
   color: var(--body-color);
+}
+
+.side-menu button {
+  padding: 0;
+  font-size: 15px;
+  font-family: var(--body-font);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.side-menu button:disabled {
+  cursor: not-allowed;
+}
+
+.side-menu svg:hover + .side-menu button:disabled {
+  color: red;
 }
 
 .side-menu svg {
@@ -216,7 +234,7 @@ body {
 }
 
 .side-menu svg:hover {
-  color: #fff;
+  /* color: #fff; */
 }
 
 .side-title {
