@@ -1,5 +1,7 @@
-function addWebpExtension(url: string) {
+export function addWebpExtension(url: string) {
   return `${url}/cover.webp`;
 }
 
-export default addWebpExtension;
+export function addOrderWebpExtension(url: string, order: number) {
+  return `${url}/lesson-${order}.webp.`;
+}

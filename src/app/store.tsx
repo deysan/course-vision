@@ -1,8 +1,11 @@
 import { createContext, useMemo } from 'react';
 
-import { REQUEST_OPTIONS, URL } from './api';
 import { useAsyncEffect } from './hooks/useAsyncEffect';
-import { Courses } from './types';
+import { REQUEST_OPTIONS, URL } from './services/api';
+import { validateCoursesApi } from './services/contracts';
+import { Courses } from './services/types';
+
+// import { Courses } from './types';
 
 type Context = {
   courses: Courses[] | null;
@@ -23,7 +26,7 @@ function ContextProvider({ children }: { children: React.ReactElement }) {
     () =>
       fetch(URL(), REQUEST_OPTIONS)
         .then(res => res.json())
-        .then(data => data.courses),
+        .then(data => validateCoursesApi.parse(data.courses)),
     () => Promise.resolve(),
     [],
   );

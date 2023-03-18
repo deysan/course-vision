@@ -1,8 +1,7 @@
 import { useContext } from 'react';
 
 import { Context } from '../store';
-import addWebpExtension from '../utils/addWebpExtension';
-import formatTime from '../utils/formatTime';
+import { addWebpExtension, formatTime } from '../utils';
 
 function CourseVision() {
   const { courses, error, isLoading } = useContext(Context);
