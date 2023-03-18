@@ -3,5 +3,5 @@ export function addWebpExtension(url: string) {
 }
 
 export function addOrderWebpExtension(url: string, order: number) {
-  return `${url}/lesson-${order}.webp.`;
+  return `${url}/lesson-${order}.webp`;
 }

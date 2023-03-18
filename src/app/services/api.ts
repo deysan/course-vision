@@ -4,8 +4,12 @@ const token = [
   import.meta.env.VITE_API_REQUEST_SIGNATURE,
 ].join('.');
 
-export const REQUEST_OPTIONS = {
+const options = {
   headers: { Authorization: `Bearer ${token}` },
 };
 
-export const URL = (courseId?: string) => import.meta.env.VITE_API_REQUEST_URL + (courseId || '');
+const url = (courseId?: string) => import.meta.env.VITE_API_REQUEST_URL + (courseId || '');
+
+const api = (id?: string) => fetch(url(id), options);
+
+export default api;

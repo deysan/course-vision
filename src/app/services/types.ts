@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
-import { coursesApi } from './contracts';
+import { courseApi, coursesApi } from './contracts';
 
 export type Courses = z.infer<typeof coursesApi>;
+export type Course = z.infer<typeof courseApi>;

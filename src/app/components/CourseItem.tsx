@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { Courses } from '../services/types';
-import { addWebpExtension } from '../utils';
+import { addWebpExtension, formatDate } from '../utils';
 import VideoPlayer from './VideoPlayer';
 
 type Props = {
@@ -16,7 +17,8 @@ function CourseItem(props: Props) {
   const [isHover, setHover] = useState(false);
 
   return (
-    <div
+    <Link
+      to={course.id}
       className="video anim"
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
@@ -31,7 +33,11 @@ function CourseItem(props: Props) {
           muted
         />
       </div>
-      <div className="video-by">{course.tags.map(tag => tag)}</div>
+      <div className="video-by">
+        {course.tags.map(tag => (
+          <span key={tag}>{`#${tag}`}</span>
+        ))}
+      </div>
       <h3 className="video-name">{course.title}</h3>
       {course.meta.skills?.length ? (
         <ul className="video-desc">
@@ -43,13 +49,9 @@ function CourseItem(props: Props) {
       <div className="video-view">
         Lessons {course.lessonsCount}
         <span className="seperate video-seperate"></span>
-        {new Intl.DateTimeFormat('en-US', {
-          day: 'numeric',
-          month: 'long',
-          year: 'numeric',
-        }).format(Date.parse(course.launchDate))}
+        {formatDate(course.launchDate)}
       </div>
-    </div>
+    </Link>
   );
 }
 

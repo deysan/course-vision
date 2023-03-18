@@ -6,6 +6,8 @@ import { Context } from '../store';
 function CourseVision() {
   const { courses } = useContext(Context);
 
+  console.log('courses', courses);
+
   return (
     <>
       <div className="main-header anim">Discover</div>

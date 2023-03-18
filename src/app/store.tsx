@@ -1,47 +1,64 @@
 import { createContext, useMemo } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 
 import { useAsyncEffect } from './hooks/useAsyncEffect';
-import { REQUEST_OPTIONS, URL } from './services/api';
-import { validateCoursesApi } from './services/contracts';
-import { Courses } from './services/types';
-
-// import { Courses } from './types';
+import api from './services/api';
+import { validateCourseApi, validateCoursesApi } from './services/contracts';
+import { Course, Courses } from './services/types';
 
 type Context = {
+  course: Course | null;
   courses: Courses[] | null;
   error: any;
   isLoading: boolean;
 };
 
-const initialContext = { courses: null, error: null, isLoading: false };
+const initialContext = { course: null, courses: null, error: null, isLoading: false };
 
 const Context = createContext<Context>(initialContext);
 
 function ContextProvider({ children }: { children: React.ReactElement }) {
+  const { pathname } = useLocation();
+  const { courseId } = useParams();
+
   const {
     result: courses,
-    error,
-    isLoading,
+    error: errorCourses,
+    isLoading: isLoadingCourses,
   } = useAsyncEffect(
-    () =>
-      fetch(URL(), REQUEST_OPTIONS)
-        .then(res => res.json())
-        .then(data => validateCoursesApi.parse(data.courses)),
+    pathname === '/'
+      ? () =>
+          api()
+            .then(res => res.json())
+            .then(data => validateCoursesApi.parse(data.courses))
+      : () => Promise.resolve(),
     () => Promise.resolve(),
-    [],
+    [pathname],
   );
 
-  console.log('result', courses);
-  console.log('error', error);
-  console.log('isLoading', isLoading);
+  const {
+    result: course,
+    error: errorCourse,
+    isLoading: isLoadingCourse,
+  } = useAsyncEffect(
+    courseId
+      ? () =>
+          api(courseId)
+            .then(res => res.json())
+            .then(data => validateCourseApi.parse(data))
+      : () => Promise.resolve(),
+    () => Promise.resolve(),
+    [courseId],
+  );
 
   const contextValue = useMemo(
     () => ({
+      course,
       courses,
-      error,
-      isLoading,
+      error: errorCourses || errorCourse,
+      isLoading: isLoadingCourses || isLoadingCourse,
     }),
-    [courses, error, isLoading],
+    [courses, errorCourses, errorCourse, isLoadingCourses, isLoadingCourse],
   );
 
   return <Context.Provider value={contextValue}>{children}</Context.Provider>;

@@ -11,7 +11,11 @@ import './style.css';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <RootLayout />,
+    element: (
+      <ContextProvider>
+        <RootLayout />
+      </ContextProvider>
+    ),
     errorElement: <NotFound />,
     children: [
       {
@@ -31,11 +35,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return (
-    <ContextProvider>
-      <RouterProvider router={router} />
-    </ContextProvider>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
