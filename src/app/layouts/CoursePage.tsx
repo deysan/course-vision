@@ -1,10 +1,12 @@
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
+import ContentList from '../components/ContentList';
 import VideoPlayer from '../components/VideoPlayer';
 import { Course } from '../services/types';
 import { Context } from '../store';
 import { addOrderWebpExtension, formatDate, formatTime } from '../utils';
+import throttle from 'lodash.throttle';
 
 function CoursePage() {
   const { courseId, videoId } = useParams();
@@ -15,11 +17,16 @@ function CoursePage() {
 
   const [lesson, setLesson] = useState<Course['lessons'][0] | undefined>(course?.lessons[0]);
 
-  const handleProgress = () => {
-    if (lesson?.id) {
-      setProgressTime(prev => ({ ...prev, [lesson.id]: videoRef?.current?.currentTime || 0 }));
-    }
-  };
+  const handleProgress = useRef(
+    throttle((lessonId?: string) => {
+      const currentTime = videoRef?.current?.currentTime;
+
+      if (lessonId && currentTime) {
+        console.log('currentTime', currentTime);
+        setProgressTime(prev => ({ ...prev, [lessonId]: currentTime }));
+      }
+    }, 1000),
+  );
 
   useEffect(() => {
     if (videoId) {
@@ -76,7 +83,7 @@ function CoursePage() {
               lesson?.previewImageLink &&
               addOrderWebpExtension(lesson.previewImageLink, lesson?.order)
             }
-            onTimeUpdate={handleProgress}
+            onTimeUpdate={() => handleProgress.current(lesson?.id)}
           />
 
           <div className="video-detail">
@@ -95,6 +102,7 @@ function CoursePage() {
 
               <div className="video-p-title anim">{course?.title}</div>
               <div className="video-p-subtitle anim">{course?.description}</div>
+              <div className="video-p-title anim">Skills</div>
               <ul className="video-p-subtitle anim">
                 {course?.meta.skills?.map((skill, index) => (
                   <li key={index as React.Key}>{skill}</li>
@@ -105,60 +113,10 @@ function CoursePage() {
         </div>
         <div className="chat-stream">
           <div className="chat-vid__title anim">Course content</div>
-          <div className="chat-vid anim">
-            {course?.lessons.map(item => (
-              <Link
-                key={item.id}
-                to={`/${courseId}/${item.id}`}
-                className={`chat-vid__wrapper ${item.id === lesson?.id ? 'active' : ''}`}
-                onClick={e => (item?.status === 'locked' ? e.preventDefault() : undefined)}
-              >
-                <img
-                  className="chat-vid__img"
-                  src={addOrderWebpExtension(item.previewImageLink, item.order)}
-                />
-                <div className="chat-vid__content" title={item.status === 'locked' ? 'locked' : ''}>
-                  <div className="chat-vid__name">{item.title}</div>
-                  <div className="chat-vid__by">
-                    {item?.status === 'unlocked' ? (
-                      <svg
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.5"
-                        shape-rendering="geometricPrecision"
-                        viewBox="0 0 24 24"
-                        height="16"
-                        width="16"
-                        style={{ color: 'rgb(38, 203, 124)' }}
-                      >
-                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
-                        <path d="M7 11V7a5 5 0 019.9-1"></path>
-                      </svg>
-                    ) : (
-                      <svg
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="1.5"
-                        shape-rendering="geometricPrecision"
-                        viewBox="0 0 24 24"
-                        height="16"
-                        width="16"
-                        style={{ color: 'rgb(234, 90, 148)' }}
-                      >
-                        <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
-                        <path d="M7 11V7a5 5 0 0110 0v4"></path>
-                      </svg>
-                    )}
-                    {formatTime(item.duration)}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+
+          {courseId && course?.lessons.length ? (
+            <ContentList courseId={courseId} lessonId={lesson?.id || ''} lessons={course.lessons} />
+          ) : null}
         </div>
       </div>
     </>

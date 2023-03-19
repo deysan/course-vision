@@ -5,7 +5,6 @@ import { useAsyncEffect } from './hooks/useAsyncEffect';
 import api from './services/api';
 import { validateCourseApi, validateCoursesApi } from './services/contracts';
 import { Course, Courses } from './services/types';
-import throttle from 'lodash.throttle';
 
 type Context = {
   course: Course | null;
@@ -31,11 +30,7 @@ function ContextProvider({ children }: { children: React.ReactElement }) {
   const { pathname } = useLocation();
   const { courseId } = useParams();
 
-  const isMounted = useRef(false);
-
   const [progressTime, setProgressTime] = useState<Record<string, number>>({});
-
-  console.log('progressTime', progressTime);
 
   const {
     result: courses,
@@ -71,17 +66,6 @@ function ContextProvider({ children }: { children: React.ReactElement }) {
     [courseId],
   );
 
-  const saveProgress = useRef(
-    throttle((data: Record<string, number>) => {
-      console.log('EFFECT');
-      try {
-        localStorage.setItem('progressTime', JSON.stringify(data));
-      } catch (error) {
-        console.error(error);
-      }
-    }, 1000),
-  );
-
   useEffect(() => {
     try {
       const progressData = localStorage.getItem('progressTime');
@@ -98,11 +82,13 @@ function ContextProvider({ children }: { children: React.ReactElement }) {
   }, []);
 
   useEffect(() => {
-    if (isMounted.current) {
-      saveProgress.current(progressTime);
+    if (Object.keys(progressTime).length) {
+      try {
+        localStorage.setItem('progressTime', JSON.stringify(progressTime));
+      } catch (error) {
+        console.error(error);
+      }
     }
-
-    isMounted.current = true;
   }, [progressTime]);
 
   const contextValue = useMemo(

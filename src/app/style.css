@@ -16,6 +16,12 @@ img {
   max-width: 100%;
 }
 
+ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
 :root {
   --body-font: 'Inter', sans-serif;
   --theme-bg: #1f1d2b;
@@ -592,9 +598,11 @@ body {
 }
 
 .video-desc {
+  padding-inline-start: 30px;
   padding-inline-end: 20px;
   font-size: 14px;
   line-height: 1.2em;
+  list-style: inside;
 }
 
 .video-view {
@@ -1230,6 +1238,40 @@ button.vjs-play-control.vjs-control.vjs-button {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: rgb(21 20 26 / 63%);
+  background-color: var(--body-color);
   border-radius: 10px;
+}
+
+.pagination {
+  margin-top: 20px;
+  text-align: center;
+  gap: 4px;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination li {
+  display: inline-flex;
+}
+
+.pagination li a {
+  min-width: 30px;
+  min-height: 30px;
+  flex-shrink: 0;
+  display: inline-block;
+  text-decoration: none;
+  padding: 5px 10px;
+  color: var(--body-color);
+  border-radius: 10px;
+  -webkit-transition: background-color 0.3s;
+  transition: background-color 0.3s;
+}
+
+.pagination li a.active {
+  background-color: var(--border-color);
+  color: var(--body-color);
+}
+
+.pagination li a:hover:not(.active) {
+  background-color: var(--border-color);
 }
