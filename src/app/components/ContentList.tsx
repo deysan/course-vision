@@ -14,12 +14,12 @@ function ContentList(props: Props) {
   const { courseId, lessonId, lessons, setLesson } = props;
 
   return (
-    <div className="chat-vid anim">
+    <div className="content anim">
       {lessons.map(item => (
         <Link
           key={item.id}
           to={`/${courseId}/${item.id}`}
-          className={`chat-vid__wrapper ${item.id === lessonId ? 'active' : ''} ${
+          className={`content-wrapper ${item.id === lessonId ? 'active' : ''} ${
             item?.status === 'locked' ? 'lock' : ''
           }`}
           onClick={e => {
@@ -28,12 +28,12 @@ function ContentList(props: Props) {
           }}
         >
           <img
-            className="chat-vid__img"
+            className="content-img"
             src={addOrderWebpExtension(item.previewImageLink, item.order)}
           />
-          <div className="chat-vid__content" title={item.status === 'locked' ? 'locked' : ''}>
-            <div className="chat-vid__name">{item.title}</div>
-            <div className="chat-vid__by">
+          <div className="content-content" title={item.status === 'locked' ? 'locked' : ''}>
+            <div className="content-title">{item.title}</div>
+            <div className="content-status">
               {item?.status === 'unlocked' ? (
                 <svg
                   fill="none"

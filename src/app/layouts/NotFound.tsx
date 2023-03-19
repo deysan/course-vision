@@ -5,16 +5,12 @@ function NotFound() {
   console.error(error);
 
   return (
-    <div className="container">
-      <div className="error-wrapper">
-        <h1 className="error-title">404</h1>
-        <div className="error-text">{error?.statusText || error?.message || 'Not Found Page'}</div>
-        <button className="error-btn">
-          <Link to="/" className="error-link">
-            Go Home
-          </Link>
-        </button>
-      </div>
+    <div className="error-wrapper">
+      <h1 className="error-title">404</h1>
+      <div className="error-text">{error?.statusText || error?.message || 'Not Found Page'}</div>
+      <Link to="/" className="error-btn">
+        Go Home
+      </Link>
     </div>
   );
 }

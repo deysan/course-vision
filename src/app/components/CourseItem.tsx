@@ -9,11 +9,7 @@ type Props = {
   course: Courses;
 };
 
-function CourseItem(props: Props) {
-  const { course } = props;
-
-  const videoRef = useRef<HTMLVideoElement>(null);
-
+function CourseItem({ course }: Props) {
   const [isHover, setHover] = useState(false);
 
   return (
@@ -23,7 +19,7 @@ function CourseItem(props: Props) {
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
     >
-      <div className="video-time">{course.rating}★</div>
+      <div className="video-rating">{course.rating}★</div>
       <div className="video-wrapper">
         <VideoPlayer
           src={course.meta.courseVideoPreview?.link || ''}
@@ -33,7 +29,7 @@ function CourseItem(props: Props) {
           muted
         />
       </div>
-      <div className="video-by">
+      <div className="video-tag">
         {course.tags.map(tag => (
           <span key={tag}>{`#${tag}`}</span>
         ))}
@@ -48,7 +44,7 @@ function CourseItem(props: Props) {
       ) : null}
       <div className="video-view">
         Lessons {course.lessonsCount}
-        <span className="seperate video-seperate"></span>
+        <span className="separate video-separate"></span>
         {formatDate(course.launchDate)}
       </div>
     </Link>

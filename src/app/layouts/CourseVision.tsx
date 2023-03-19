@@ -39,6 +39,7 @@ function CourseVision() {
   return (
     <div ref={containerRef}>
       <div className="main-header anim">Discover</div>
+
       {courses?.length ? (
         <>
           <div className="videos">

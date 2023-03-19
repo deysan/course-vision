@@ -76,7 +76,7 @@ function CoursePage() {
           <VideoPlayer
             videoRef={videoRef}
             src={lesson?.link || ''}
-            className="video-js vjs-default-skin anim"
+            className="anim"
             width="640px"
             height="267px"
             controls
@@ -102,10 +102,10 @@ function CoursePage() {
                 </div>
               </div>
 
-              <div className="video-p-title anim">{course?.title}</div>
+              <div className="small-header anim">{course?.title}</div>
               <div className="video-p-subtitle anim">{course?.description}</div>
 
-              <div className="video-p-title anim">Skills</div>
+              <div className="small-header anim">Skills:</div>
 
               <ul className="video-p-subtitle anim">
                 {course?.meta.skills?.map((skill, index) => (
@@ -115,8 +115,8 @@ function CoursePage() {
             </div>
           </div>
         </div>
-        <div className="chat-stream">
-          <div className="chat-vid__title anim">Course content</div>
+        <div className="content-stream">
+          <div className="content-title anim">Course content</div>
 
           {courseId && course?.lessons.length ? (
             <ContentList
