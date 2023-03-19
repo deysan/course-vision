@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import VideoPlayer from '../components/VideoPlayer';
@@ -9,21 +9,21 @@ import { addOrderWebpExtension, formatDate, formatTime } from '../utils';
 function CoursePage() {
   const { courseId, videoId } = useParams();
 
-  const { course } = useContext(Context);
+  const { course, progressTime, setProgressTime } = useContext(Context);
 
-  console.log('course', course);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  const [lesson, setLesson] = useState<Course['lessons'][0] | undefined>(undefined);
-  console.log('🚀 ~ file: CoursePage.tsx:19 ~ CoursePage ~ lesson:', lesson);
+  const [lesson, setLesson] = useState<Course['lessons'][0] | undefined>(course?.lessons[0]);
 
-  const lessonsList = useMemo(
-    () => (course?.lessons.length ? [...course.lessons].sort((a, b) => a.order - b.order) : []),
-    [course?.lessons],
-  );
+  const handleProgress = () => {
+    if (lesson?.id) {
+      setProgressTime(prev => ({ ...prev, [lesson.id]: videoRef?.current?.currentTime || 0 }));
+    }
+  };
 
   useEffect(() => {
     if (videoId) {
-      const _lesson = lessonsList.find(lesson => lesson.id === videoId);
+      const _lesson = course?.lessons.find(lesson => lesson.id === videoId);
 
       if (_lesson) {
         setLesson(_lesson);
@@ -31,15 +31,41 @@ function CoursePage() {
       }
     }
 
-    setLesson(lessonsList.find(lesson => lesson.order === 1));
+    setLesson(course?.lessons[0]);
   }, [course, videoId]);
+
+  useEffect(() => {
+    if (lesson?.id && progressTime[lesson.id] && videoRef?.current) {
+      videoRef.current.currentTime = progressTime[lesson.id];
+    }
+  }, [lesson?.id]);
 
   return (
     <>
-      <div className="main-header anim">{lesson?.title}</div>
+      <div className="main-header anim">
+        {lesson?.title}{' '}
+        {lesson?.status === 'locked' ? (
+          <svg
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            shape-rendering="geometricPrecision"
+            viewBox="0 0 24 24"
+            height="20"
+            width="20"
+            style={{ color: 'rgb(234, 90, 148)' }}
+          >
+            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0110 0v4"></path>
+          </svg>
+        ) : null}
+      </div>
       <div className="stream-area">
         <div className="video-stream">
           <VideoPlayer
+            videoRef={videoRef}
             src={lesson?.link || ''}
             className="video-js vjs-default-skin anim"
             width="640px"
@@ -50,7 +76,7 @@ function CoursePage() {
               lesson?.previewImageLink &&
               addOrderWebpExtension(lesson.previewImageLink, lesson?.order)
             }
-            data-setup='{ "aspectRatio":"940:620", "playbackRates": [1, 1.5, 2] }'
+            onTimeUpdate={handleProgress}
           />
 
           <div className="video-detail">
@@ -80,18 +106,18 @@ function CoursePage() {
         <div className="chat-stream">
           <div className="chat-vid__title anim">Course content</div>
           <div className="chat-vid anim">
-            {lessonsList.map(item => (
+            {course?.lessons.map(item => (
               <Link
                 key={item.id}
                 to={`/${courseId}/${item.id}`}
                 className={`chat-vid__wrapper ${item.id === lesson?.id ? 'active' : ''}`}
-                style={{ pointerEvents: item?.status === 'unlocked' ? 'auto' : 'none' }}
+                onClick={e => (item?.status === 'locked' ? e.preventDefault() : undefined)}
               >
                 <img
                   className="chat-vid__img"
                   src={addOrderWebpExtension(item.previewImageLink, item.order)}
                 />
-                <div className="chat-vid__content">
+                <div className="chat-vid__content" title={item.status === 'locked' ? 'locked' : ''}>
                   <div className="chat-vid__name">{item.title}</div>
                   <div className="chat-vid__by">
                     {item?.status === 'unlocked' ? (
@@ -121,7 +147,7 @@ function CoursePage() {
                         viewBox="0 0 24 24"
                         height="16"
                         width="16"
-                        style={{ color: 'rgb(38, 203, 124)' }}
+                        style={{ color: 'rgb(234, 90, 148)' }}
                       >
                         <rect width="18" height="11" x="3" y="11" rx="2" ry="2"></rect>
                         <path d="M7 11V7a5 5 0 0110 0v4"></path>
@@ -133,7 +159,6 @@ function CoursePage() {
               </Link>
             ))}
           </div>
-          {/* <div className="chat-vid__button anim">See All related videos (32)</div> */}
         </div>
       </div>
     </>

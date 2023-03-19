@@ -29,7 +29,7 @@ function CourseItem(props: Props) {
           src={course.meta.courseVideoPreview?.link || ''}
           poster={addWebpExtension(course.previewImageLink)}
           autoPlay={isHover}
-          loop={true}
+          loop
           muted
         />
       </div>
