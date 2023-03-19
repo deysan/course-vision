@@ -1,4 +1,4 @@
-import { createContext, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, useEffect, useMemo, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 
 import { useAsyncEffect } from './hooks/useAsyncEffect';
@@ -69,7 +69,6 @@ function ContextProvider({ children }: { children: React.ReactElement }) {
   useEffect(() => {
     try {
       const progressData = localStorage.getItem('progressTime');
-      console.log('progressData', progressData);
 
       if (progressData === null) {
         return undefined;

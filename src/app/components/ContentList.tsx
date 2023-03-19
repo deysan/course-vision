@@ -7,10 +7,11 @@ type Props = {
   courseId: string;
   lessonId: string;
   lessons: Course['lessons'];
+  setLesson: (item: Course['lessons'][0]) => void;
 };
 
 function ContentList(props: Props) {
-  const { courseId, lessonId, lessons } = props;
+  const { courseId, lessonId, lessons, setLesson } = props;
 
   return (
     <div className="chat-vid anim">
@@ -18,8 +19,13 @@ function ContentList(props: Props) {
         <Link
           key={item.id}
           to={`/${courseId}/${item.id}`}
-          className={`chat-vid__wrapper ${item.id === lessonId ? 'active' : ''}`}
-          onClick={e => (item?.status === 'locked' ? e.preventDefault() : undefined)}
+          className={`chat-vid__wrapper ${item.id === lessonId ? 'active' : ''} ${
+            item?.status === 'locked' ? 'lock' : ''
+          }`}
+          onClick={e => {
+            e.preventDefault();
+            item?.status === 'unlocked' ? setLesson(item) : null;
+          }}
         >
           <img
             className="chat-vid__img"

@@ -943,6 +943,10 @@ video {
   border-radius: 10px;
 }
 
+.chat-vid__wrapper.lock {
+  cursor: not-allowed;
+}
+
 .chat-vid__name {
   color: #fff;
   font-size: 14px;

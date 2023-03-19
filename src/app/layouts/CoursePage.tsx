@@ -14,6 +14,7 @@ function CoursePage() {
   const { course, progressTime, setProgressTime } = useContext(Context);
 
   const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const [lesson, setLesson] = useState<Course['lessons'][0] | undefined>(course?.lessons[0]);
 
@@ -22,7 +23,6 @@ function CoursePage() {
       const currentTime = videoRef?.current?.currentTime;
 
       if (lessonId && currentTime) {
-        console.log('currentTime', currentTime);
         setProgressTime(prev => ({ ...prev, [lessonId]: currentTime }));
       }
     }, 1000),
@@ -42,8 +42,9 @@ function CoursePage() {
   }, [course, videoId]);
 
   useEffect(() => {
-    if (lesson?.id && progressTime[lesson.id] && videoRef?.current) {
+    if (lesson?.id && progressTime[lesson.id] && videoRef?.current && containerRef?.current) {
       videoRef.current.currentTime = progressTime[lesson.id];
+      containerRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [lesson?.id]);
 
@@ -69,7 +70,8 @@ function CoursePage() {
           </svg>
         ) : null}
       </div>
-      <div className="stream-area">
+
+      <div className="stream-area" ref={containerRef}>
         <div className="video-stream">
           <VideoPlayer
             videoRef={videoRef}
@@ -102,7 +104,9 @@ function CoursePage() {
 
               <div className="video-p-title anim">{course?.title}</div>
               <div className="video-p-subtitle anim">{course?.description}</div>
+
               <div className="video-p-title anim">Skills</div>
+
               <ul className="video-p-subtitle anim">
                 {course?.meta.skills?.map((skill, index) => (
                   <li key={index as React.Key}>{skill}</li>
@@ -115,7 +119,12 @@ function CoursePage() {
           <div className="chat-vid__title anim">Course content</div>
 
           {courseId && course?.lessons.length ? (
-            <ContentList courseId={courseId} lessonId={lesson?.id || ''} lessons={course.lessons} />
+            <ContentList
+              courseId={courseId}
+              lessonId={lesson?.id || ''}
+              lessons={course.lessons}
+              setLesson={setLesson}
+            />
           ) : null}
         </div>
       </div>

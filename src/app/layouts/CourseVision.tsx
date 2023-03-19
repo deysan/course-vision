@@ -1,5 +1,5 @@
 import qs from 'qs';
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import CourseItem from '../components/CourseItem';
