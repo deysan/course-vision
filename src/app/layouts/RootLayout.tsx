@@ -1,8 +1,17 @@
+import { useContext } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+
+import Loader from '../components/Loader';
+import { Context } from '../store';
+import NotFound from './NotFound';
 
 function RootLayout() {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const { error, isLoading } = useContext(Context);
+
+  if (error) return <NotFound />;
 
   return (
     <div className="container">
@@ -44,9 +53,7 @@ function RootLayout() {
             <input type="text" placeholder="Search" />
           </div> */}
         </div>
-        <div className="main-container">
-          <Outlet />
-        </div>
+        <div className="main-container">{isLoading ? <Loader /> : <Outlet />}</div>
       </div>
     </div>
   );

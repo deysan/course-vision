@@ -13,7 +13,7 @@ function CoursePage() {
 
   const { course, progressTime, setProgressTime } = useContext(Context);
 
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const [lesson, setLesson] = useState<Course['lessons'][0] | undefined>(course?.lessons[0]);
 

@@ -32,7 +32,6 @@ function CourseVision() {
 
   useEffect(() => {
     if (containerRef?.current) {
-      console.log('containerRef.current', containerRef.current.clientTop);
       containerRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [currentPage]);
